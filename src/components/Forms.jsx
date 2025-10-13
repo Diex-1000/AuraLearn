@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { createProfile } from "@/api/apiServices"
+
 
 export default function StepperForm() {
   const [step, setStep] = useState(1);
@@ -33,7 +35,6 @@ export default function StepperForm() {
     ciudad: "",
     areaFormacion: "",
     idiomas: "",
-    certificaciones: "",
     puesto: "",
     mesesPuesto: "",
     funciones: "",
@@ -47,21 +48,114 @@ export default function StepperForm() {
     resolucionProb: 3,
     adaptabilidad: 3,
     gestionTiempo: 3,
+    herramientasDigBas: 3,
+    herramientasTrabajo: 3,
+    capacidadAnalisis: 3,
+    gestionProyecto: 3,
+    competenciasDigBas: 3,
     formatos: [],
     certificaciones: "",
   });
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value, type } = e.target;
+    setFormData({ 
+      ...formData, 
+      [name]: type === "range" || type === "number" ? Number(value) : value 
+    });
   };
+
   const totalSteps = 7;
+  const nextStep = () => { if (step < totalSteps) setStep(step + 1); };
+  const prevStep = () => { if (step > 1) setStep(step - 1); };
 
-  const nextStep = () => {
-    if (step < totalSteps) setStep(step + 1);
-  };
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-  const prevStep = () => {
-    if (step > 1) setStep(step - 1);
-  };
+  try {
+    const payload = {
+      basic: {
+        name: formData.nombre,
+        email: formData.correo,
+        age: Number(formData.edad),
+        gender: [selectedGender], // zod pide array
+        country: formData.pais.toLowerCase(),
+        state: formData.estado.toLowerCase(),
+        city: formData.ciudad.toLowerCase(),
+      },
+      education: [
+        {
+          level: selectedEducation || "Universidad",
+          field: formData.areaFormacion || "No especificado",
+          languages: formData.idiomas || "Español",
+          certifications: formData.certificaciones || "Ninguna"
+        }
+      ],
+      experience: [
+        {
+          previousJob: formData.experienciasLaborales || "Sin experiencia",
+          projects: [
+            { role_improved: formData.proyectosPrevios || "N/A" }
+          ],
+          tools: formData.herramientas || "N/A"
+        }
+      ],
+      softSkills: {
+        comunicacionEfectiva: Number(formData.comunicacion) || 3,
+        trabajoEnEquipo: Number(formData.trabajoEquipo) || 3,
+        resolucionDeProblemas: Number(formData.resolucionProb) || 3,
+        adaptabilidad: Number(formData.adaptabilidad) || 3,
+        gestionDelTiempo: Number(formData.gestionTiempo) || 3,
+      },
+      digitalSkills: {
+        herramientas_dig_bas: Number(formData.herramientasDigBas) || 3,
+        herramientas_trabajo: Number(formData.herramientasTrabajo) || 3,
+        capacidad_analisis: Number(formData.capacidadAnalisis) || 3,
+        gestion_proyecto: Number(formData.gestionProyecto) || 3,
+        compe_dig_bas: Number(formData.competenciasDigBas) || 3,
+      },
+      jobInformation: {
+        actualPosition: formData.puesto || "N/A",
+        timeInJob: formData.mesesPuesto || "0",
+        functionsJob: formData.funciones
+          ? formData.funciones.split(",").map(f => f.trim()).filter(Boolean)
+          : ["N/A"],
+        technicalReq: formData.requerimientos
+          ? formData.requerimientos.split(",").map(r => r.trim()).filter(Boolean)
+          : ["N/A"],
+        improveAreas: formData.areasMejorar
+          ? formData.areasMejorar.split(",").map(a => a.trim()).filter(Boolean)
+          : ["N/A"],
+      },
+      learningMethod: {
+        modalidad_preferida: selectedCapacitation || "Online",
+        tiempo_disponible: selectedTimeWeekly || "3 a 5 horas",
+        metodo_aprendizaje:
+          formData.formatos.length > 0
+            ? formData.formatos.map(f => f.toLowerCase())
+            : ["videos"],
+        certificaciones: formData.certificaciones
+          ? [formData.certificaciones.toLowerCase()]
+          : ["no"],
+      }
+    };
+
+    const res = await createProfile(payload);
+    console.log("Perfil creado:", res.data);
+
+    alert("Perfil enviado con éxito!");
+  } catch (error) {
+    if (error.response) {
+      console.error("Backend validation error:", error.response.data);
+      alert("Error: " + JSON.stringify(error.response.data));
+    } else {
+      console.error("Error:", error.message);
+      alert("Error: " + error.message);
+    }
+  }
+};
+
+
 
   return (
     <div className="flex items-start justify-center min-h-screen bg-gradient-to-br from-slate-100 via-sky-100 to-slate-300">
@@ -338,6 +432,9 @@ export default function StepperForm() {
                   Manejo de herramientas digitales básicas
                 </label>
                 <input
+                  name="herramientasDigBas"
+                  value={formData.herramientasDigBas}
+                  onChange={handleChange}
                   type="range"
                   min="1"
                   max="5"
@@ -358,6 +455,9 @@ export default function StepperForm() {
                   Uso de herramientas específicas del área de trabajo
                 </label>
                 <input
+                  name="herramientasTrabajo"
+                  value={formData.herramientasTrabajo}
+                  onChange={handleChange}
                   type="range"
                   min="1"
                   max="5"
@@ -377,6 +477,9 @@ export default function StepperForm() {
                   Capacidad de análisis de información
                 </label>
                 <input
+                  name="capacidadAnalisis"
+                  value={formData.capacidadAnalisis}
+                  onChange={handleChange}
                   type="range"
                   min="1"
                   max="5"
@@ -396,6 +499,9 @@ export default function StepperForm() {
                   Gestión de proyectos y tareas
                 </label>
                 <input
+                  name="gestionProyecto"
+                  value={formData.gestionProyecto}
+                  onChange={handleChange}
                   type="range"
                   min="1"
                   max="5"
@@ -415,6 +521,9 @@ export default function StepperForm() {
                   Competencias digitales básicas
                 </label>
                 <input
+                  name="competenciasDigBas"
+                  value={formData.competenciasDigBas}
+                  onChange={handleChange}
                   type="range"
                   min="1"
                   max="5"
@@ -709,7 +818,7 @@ export default function StepperForm() {
               </DropdownMenu>
 
               <Link href="/home" className="block w-full mt-4">
-                <Button className="w-full bg-blue-900 hover:bg-blue-950 text-white">
+                <Button onClick={handleSubmit} className="w-full bg-blue-900 hover:bg-blue-950 text-white">
                   Confirmar y Enviar
                 </Button>
               </Link>

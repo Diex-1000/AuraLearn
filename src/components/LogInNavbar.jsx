@@ -11,14 +11,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export default function Navbar() {
+export default function LogInNavbar() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   return (
     <nav className="bg-gray-900 w-full z-50">
       <div className="container mx-auto flex items-center justify-between px-6 h-20 relative">
         {/* Logo a la izquierda */}
-        <Link href="/perfil" className="flex items-center gap-2 hover:no-underline">
+        <Link href="/home" className="flex items-center gap-2 hover:no-underline">
           <span className="text-2xl font-semibold text-white hover:text-blue-500">
             AuraLearn
           </span>
@@ -26,16 +26,13 @@ export default function Navbar() {
 
         {/* Menú del centro (visible en escritorio) */}
         <div className="hidden md:flex gap-8 items-center absolute left-1/2 -translate-x-1/2">
-          <NavButton href="/forms" label="Forms" />
-
-          <NavButton href="/perfil" label="Perfil" />
           
-          <NavButton href="/response" label="Plan de estudio" />
         </div>
 
-        {/* Menu a la derecha */}
+        {/* Idioma (a la derecha) */}
         <div className="hidden md:block">
-          <NavButton href="/home" label="Log out" />
+          <NavButton href="/login" label="Log in" />
+          <NavButton href="/login" label="Sing up" />
         </div>
 </div>
 

@@ -1,19 +1,16 @@
 
 import {
-  LogInNavbar,
-  MainPage,
-  Features,
-  Problematica
+  Navbar,
+  ResponseCard,
 } from '../../components/index';
 
 
 export default function Home() {
   return (
     <div className="bg-slate-200">
-      <LogInNavbar/>
-      <MainPage/>
-      <Features/>
-      <Problematica/>
+      <Navbar/>
+      <ResponseCard/>
+      
       
 
     </div>

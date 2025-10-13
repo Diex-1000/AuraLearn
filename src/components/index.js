@@ -6,6 +6,9 @@ export { default as MainPage } from './MainPage';
 export { default as Features } from './Features';
 export { default as Problematica } from './Problematica';
 export { default as FormHeader } from './FormHeader';
+export { default as LogInNavbar } from './LogInNavbar';
+export { default as SingUp } from './SingUp';
+export { default as ResponseCard } from './ResponseCard';
 
 export * from './ui/button';
 export * from './ui/card';

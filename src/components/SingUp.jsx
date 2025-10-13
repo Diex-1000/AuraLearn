@@ -6,8 +6,8 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#e6ebf4] to-[#dce3f0] px-4">
       <div className="w-full max-w-sm bg-white p-8 rounded-2xl shadow-2xl border border-gray-100">
         <div className="text-center mb-6">
-          <h3 className="text-gray-500 text-sm mb-1">Bienvenido de nuevo</h3>
-          <h2 className="text-2xl font-bold text-gray-800">Iniciar Sesión</h2>
+          <h3 className="text-gray-500 text-sm mb-1">Bienvenido</h3>
+          <h2 className="text-2xl font-bold text-gray-800">Crear Cuenta</h2>
         </div>
 
         <form className="space-y-4">
@@ -39,12 +39,12 @@ export default function Login() {
 
           <div className="text-center">
             <Link
-              href="/singup"
+              href="/login"
               className="text-sm text-gray-600 hover:text-gray-900 transition"
             >
-              ¿No tienes cuenta?{" "}
+              ¿Ya tienes cuenta?{" "}
               <span className="font-medium text-gray-800 hover:underline">
-                Crear cuenta
+                Iniciar sesión 
               </span>
             </Link>
           </div>
@@ -52,9 +52,9 @@ export default function Login() {
           <Link href="/perfil">
             <button
               type="button"
-              className="w-full bg-gray-900 text-white py-2 rounded-lg hover:bg-gray-700 transition-all shadow-sm hover:shadow-md"
+              className="w-full bg-gray-900 text-white py-2 rounded-lg hover:bg-gray-800 transition-all shadow-sm hover:shadow-md"
             >
-              Entrar
+              Crear
             </button>
           </Link>
         </form>
@@ -62,4 +62,3 @@ export default function Login() {
     </div>
   );
 }
-
