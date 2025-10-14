@@ -163,7 +163,7 @@ export default function StepperForm() {
   }
 };
     if (apiResponse) {
-      return <ResponseCard responseText={typeof apiResponse === "string" ? apiResponse : JSON.stringify(apiResponse, null, 2)} />;
+      return <ResponseCard responseText={apiResponse.message || "No se recibió mensaje del servidor"} />;
     }
 
 
