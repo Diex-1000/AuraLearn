@@ -17,6 +17,8 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { createProfile } from "@/api/apiServices"
+import ResponseCard from "@/components/ResponseCard";
+
 
 
 export default function StepperForm() {
@@ -56,6 +58,8 @@ export default function StepperForm() {
     formatos: [],
     certificaciones: "",
   });
+  const [apiResponse, setApiResponse] = useState(null);
+
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
@@ -141,7 +145,11 @@ export default function StepperForm() {
     };
 
     const res = await createProfile(payload);
+    console.log("Respuesta completa del backend:", res.data);
     console.log("Perfil creado:", res.data);
+    setApiResponse(res.data);
+
+
 
     alert("Perfil enviado con éxito!");
   } catch (error) {
@@ -154,6 +162,10 @@ export default function StepperForm() {
     }
   }
 };
+    if (apiResponse) {
+      return <ResponseCard responseText={typeof apiResponse === "string" ? apiResponse : JSON.stringify(apiResponse, null, 2)} />;
+    }
+
 
 
 

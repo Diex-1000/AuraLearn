@@ -3,91 +3,34 @@ import { useState, useEffect } from "react";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Sparkles } from "lucide-react";
 
-export default function AIResponseCard() {
-  const fullText = `
-Etapa 1: Análisis general del perfil
-El candidato Juan Pérez es un profesional con formación en Ingeniería en Sistemas y experiencia como Backend Developer. Presenta dominio de Node.js, React y MongoDB, además de certificación AWS Certified Cloud Practitioner. Su perfil muestra una combinación sólida entre habilidades técnicas y blandas.
-
-Datos generales:
-- Nombre: Juan Pérez
-- Correo: juanperez@example.com
-- Edad: 28 años
-- Ciudad: Mérida, Yucatán, México
-
-Información académica:
-- Nivel: Universidad
-- Campo: Ingeniería en Sistemas
-- Idiomas: Español, Inglés
-- Certificación: AWS Certified Cloud Practitioner
-
-Experiencia laboral:
-- Puesto actual: Backend Developer
-- Tiempo en el puesto: 12 meses
-- Funciones: Diseño de APIs, mantenimiento de bases de datos, optimización de consultas y colaboración con equipos de frontend.
-- Herramientas: Node.js, React, MongoDB, Docker
-
-Resumen:
-Juan demuestra un perfil técnico fuerte con orientación a la optimización de procesos y experiencia práctica en desarrollo full stack. Posee una actitud colaborativa y adaptabilidad ante nuevos desafíos tecnológicos.
-
-Etapa 2: Competencias, habilidades y conocimientos
-Competencias:
-- Desarrollo backend con arquitectura escalable.
-- Trabajo colaborativo en entornos ágiles.
-- Implementación de microservicios.
-
-Habilidades técnicas:
-- Node.js (nivel avanzado)
-- React (nivel intermedio)
-- MongoDB (nivel avanzado)
-- Docker (nivel intermedio)
-- Gestión de proyectos (nivel intermedio)
-
-Habilidades blandas:
-- Comunicación efectiva (4/5)
-- Trabajo en equipo (5/5)
-- Resolución de problemas (4/5)
-- Adaptabilidad (5/5)
-- Gestión del tiempo (3/5)
-
-Etapa 3: Puestos recomendados
-1. Backend Engineer
-2. Full Stack Developer
-3. Cloud Solutions Developer
-
-Etapa 4: Áreas de mejora
-- Inglés técnico avanzado.
-- Gestión de proyectos ágiles.
-- Profundización en DevOps y CI/CD.
-
-Etapa 5: Plan de capacitación (3 meses)
-- Mes 1: Curso de inglés técnico (plataformas como Platzi o Udemy).
-- Mes 2: Introducción a DevOps y Docker avanzado.
-- Mes 3: Certificación en metodologías ágiles (Scrum Fundamentals).
-
-Etapa 6: Cursos sugeridos
-- "Docker & Kubernetes: The Practical Guide" – Udemy.
-- "Scrum Fundamentals Certified" – SCRUMstudy.
-- "Inglés técnico para profesionales IT" – Platzi.
-
-Etapa 7: Resumen final
-Juan Pérez posee una base sólida para continuar su crecimiento hacia posiciones de desarrollo avanzado y liderazgo técnico. Su enfoque de aprendizaje continuo y experiencia práctica lo posicionan favorablemente para roles que combinen desarrollo y arquitectura de software.
-`;
-
+export default function AIResponseCard({ responseText }) {
   const [displayedText, setDisplayedText] = useState("");
 
-  // efecto tipo IA: muestra letra por letra
+  // efecto tipo IA (letra por letra)
   useEffect(() => {
+    if (!responseText) return; // si no hay data, no hace nada
+    setDisplayedText(""); // reinicia el texto cuando cambia la respuesta
+
     let index = 0;
-    const speed = 8; // ms entre letras (ajusta: menor = más rápido)
+    const speed = 8; // velocidad en ms entre letras
     const interval = setInterval(() => {
-      setDisplayedText(fullText.slice(0, index));
+      setDisplayedText(responseText.slice(0, index));
       index++;
-      if (index > fullText.length) clearInterval(interval);
+      if (index > responseText.length) clearInterval(interval);
     }, speed);
     return () => clearInterval(interval);
-  }, []);
+  }, [responseText]);
 
-  // separa el texto ya mostrado en líneas renderizables
+  // Si no hay aún datos (antes de la API)
+  if (!responseText) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-slate-600">
+        Esperando respuesta del servidor...
+      </div>
+    );
+  }
+
+  // separa líneas para formatear visualmente
   const formatted = displayedText.split("\n").map((line, idx) => {
     if (line.trim().startsWith("Etapa")) {
       return (
@@ -133,8 +76,8 @@ Juan Pérez posee una base sólida para continuar su crecimiento hacia posicione
         </CardHeader>
         <CardContent className="text-slate-700 space-y-2 prose prose-slate max-w-none">
           {formatted}
-          {/* Indicador de "escribiendo..." */}
-          {displayedText.length < fullText.length && (
+          {/* indicador de escritura */}
+          {displayedText.length < responseText.length && (
             <span className="inline-block w-2 h-4 bg-slate-500 animate-pulse ml-1 rounded"></span>
           )}
         </CardContent>
