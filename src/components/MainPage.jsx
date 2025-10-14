@@ -21,7 +21,7 @@ export default function Hero() {
           colaboradores y ayuda a las empresas a crecer de manera estratégica.
         </p>
         <div className="flex justify-center md:justify-start">
-          <Link href="login">
+          <Link href="forms">
             <Button className="bg-gradient-to-r from-blue-800 to-blue-900 hover:from-blue-900 hover:to-blue-950 text-white px-8 py-4 rounded-lg text-xl font-semibold shadow-lg">
               Comenzar ahora
             </Button>

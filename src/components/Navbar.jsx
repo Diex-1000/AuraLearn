@@ -18,7 +18,7 @@ export default function Navbar() {
     <nav className="bg-gray-900 w-full z-50">
       <div className="container mx-auto flex items-center justify-between px-6 h-20 relative">
         {/* Logo a la izquierda */}
-        <Link href="/perfil" className="flex items-center gap-2 hover:no-underline">
+        <Link href="/home" className="flex items-center gap-2 hover:no-underline">
           <span className="text-2xl font-semibold text-white hover:text-blue-500">
             AuraLearn
           </span>
@@ -30,7 +30,7 @@ export default function Navbar() {
 
           <NavButton href="/perfil" label="Perfil" />
           
-          <NavButton href="/response" label="Plan de estudio" />
+          {/*<NavButton href="/response" label="Plan de estudio" />*/}
         </div>
 
         {/* Menu a la derecha */}
