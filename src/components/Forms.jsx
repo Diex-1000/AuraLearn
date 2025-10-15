@@ -56,9 +56,11 @@ export default function StepperForm() {
     gestionProyecto: 3,
     competenciasDigBas: 3,
     formatos: [],
-    certificaciones: "",
+    certifications: "", /* education */
+    certificaciones: "", /* learning method */
   });
   const [apiResponse, setApiResponse] = useState(null);
+  const [loading, setLoading] = useState(false);
 
 
   const handleChange = (e) => {
@@ -75,7 +77,7 @@ export default function StepperForm() {
 
  const handleSubmit = async (e) => {
   e.preventDefault();
-
+  setLoading(true);
   try {
     const payload = {
       basic: {
@@ -92,7 +94,7 @@ export default function StepperForm() {
           level: selectedEducation || "Universidad",
           field: formData.areaFormacion || "No especificado",
           languages: formData.idiomas || "Español",
-          certifications: formData.certificaciones || "Ninguna"
+          certifications: formData.certifications || "Ninguna"
         }
       ],
       experience: [
@@ -136,7 +138,10 @@ export default function StepperForm() {
         tiempo_disponible: selectedTimeWeekly || "3 a 5 horas",
         metodo_aprendizaje:
           formData.formatos.length > 0
-            ? formData.formatos.map(f => f.toLowerCase())
+            ? formData.formatos.map(f => f
+              .normalize("NFD")
+              .replace(/[\u0300-\u036f]/g, "")
+              .toLowerCase())
             : ["videos"],
         certificaciones: formData.certificaciones
           ? [formData.certificaciones.toLowerCase()]
@@ -145,23 +150,30 @@ export default function StepperForm() {
     };
 
     const res = await createProfile(payload);
-    console.log("Respuesta completa del backend:", res.data);
-    console.log("Perfil creado:", res.data);
     setApiResponse(res.data);
-
-
-
     alert("Perfil enviado con éxito!");
   } catch (error) {
     if (error.response) {
+      setApiResponse(error.response.data);
       console.error("Backend validation error:", error.response.data);
       alert("Error: " + JSON.stringify(error.response.data));
     } else {
+      setApiResponse({ message: error.message });
       console.error("Error:", error.message);
       alert("Error: " + error.message);
     }
+  } finally {
+    setLoading(false);
   }
 };
+    if (loading) {
+      return (
+        <div className="flex flex-col items-center justify-center min-h-screen">
+          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <span className="text-lg text-gray-700">Procesando respuesta...</span>
+        </div>
+      );
+    }
     if (apiResponse) {
       return <ResponseCard responseText={apiResponse.message || "No se recibió mensaje del servidor"} />;
     }
@@ -353,8 +365,8 @@ export default function StepperForm() {
                 className="w-full p-3 border rounded-md"
               />
               <textarea
-                name="certificaciones"
-                value={formData.certificaciones}
+                name="certifications"
+                value={formData.certifications}
                 onChange={handleChange}
                 placeholder="Certificaciones o cursos tomados"
                 className="w-full p-3 border rounded-md"
