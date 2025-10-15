@@ -30,39 +30,119 @@ export default function AIResponseCard({ responseText }) {
     );
   }
 
-  // separa líneas para formatear visualmente
+  // separa líneas y aplica estilos tipo markdown
   const formatted = displayedText.split("\n").map((line, idx) => {
-    if (line.trim().startsWith("Etapa")) {
+    const trimmed = line.trim();
+    // Título principal (#)
+    if (/^#\s+/.test(trimmed)) {
       return (
-        <h3
-          key={idx}
-          className="text-lg font-semibold text-slate-800 mt-6 mb-2 flex items-center gap-2"
-        >
-          <Sparkles size={18} className="text-blue-500 animate-pulse" />
-          {line.trim()}
+        <h1 key={idx} className="text-3xl font-bold text-blue-900 mt-8 mb-4">
+          {trimmed.replace(/^#\s+/, "")}
+        </h1>
+      );
+    }
+    // Subtítulo (##)
+    if (/^##\s+/.test(trimmed)) {
+      return (
+        <h2 key={idx} className="text-2xl font-semibold text-blue-800 mt-6 mb-3">
+          {trimmed.replace(/^##\s+/, "")}
+        </h2>
+      );
+    }
+    // Sub-subtítulo (###)
+    if (/^###\s+/.test(trimmed)) {
+      return (
+        <h3 key={idx} className="text-xl font-semibold text-blue-700 mt-4 mb-2">
+          {trimmed.replace(/^###\s+/, "")}
         </h3>
       );
-    } else if (line.trim().startsWith("-")) {
+    }
+    // Listas con guión
+    if (/^[-*]\s+/.test(trimmed)) {
       return (
-        <li key={idx} className="ml-6 text-slate-700 list-disc">
-          {line.replace(/^-/, "").trim()}
+        <li key={idx} className="ml-8 text-base text-slate-700 list-disc">
+          {trimmed.replace(/^[-*]\s+/, "")}
         </li>
       );
-    } else if (/^\d+\./.test(line.trim())) {
+    }
+    // Listas numeradas
+    if (/^\d+\.\s+/.test(trimmed)) {
       return (
-        <li key={idx} className="ml-6 text-slate-700 list-decimal">
-          {line.replace(/^\d+\./, "").trim()}
+        <li key={idx} className="ml-8 text-base text-slate-700 list-decimal">
+          {trimmed.replace(/^\d+\.\s+/, "")}
         </li>
       );
-    } else if (line.trim() === "") {
-      return <br key={idx} />;
-    } else {
+    }
+    // Enlaces markdown [texto](url)
+    if (/\[(.+?)\]\((.+?)\)/.test(trimmed)) {
+      // Puede haber varios links en una línea
+      const linkRegex = /\[(.+?)\]\((.+?)\)/g;
+      const parts = [];
+      let lastIndex = 0;
+      let match;
+      while ((match = linkRegex.exec(trimmed)) !== null) {
+        // Texto antes del link
+        if (match.index > lastIndex) {
+          parts.push(trimmed.slice(lastIndex, match.index));
+        }
+        // El link
+        parts.push(
+          <a key={match[2]} href={match[2]} target="_blank" rel="noopener noreferrer" className="text-blue-700 underline font-semibold hover:text-blue-900 transition">
+            {match[1]}
+          </a>
+        );
+        lastIndex = match.index + match[0].length;
+      }
+      // Texto después del último link
+      if (lastIndex < trimmed.length) {
+        parts.push(trimmed.slice(lastIndex));
+      }
       return (
-        <p key={idx} className="text-slate-700 leading-relaxed">
-          {line.trim()}
+        <p key={idx} className="text-sm text-slate-700 leading-relaxed">
+          {parts}
         </p>
       );
     }
+    // Negritas (**texto**)
+    if (/\*\*(.+?)\*\*/.test(trimmed)) {
+      // Puede haber varias negritas en una línea
+      const boldRegex = /\*\*(.+?)\*\*/g;
+      const parts = [];
+      let lastIndex = 0;
+      let match;
+      while ((match = boldRegex.exec(trimmed)) !== null) {
+        // Texto antes de la negrita
+        if (match.index > lastIndex) {
+          parts.push(trimmed.slice(lastIndex, match.index));
+        }
+        // El texto en negrita
+        parts.push(
+          <span key={match[1] + idx + lastIndex} className="font-bold uppercase text-base text-slate-900">
+            {match[1]}
+          </span>
+        );
+        lastIndex = match.index + match[0].length;
+      }
+      // Texto después de la última negrita
+      if (lastIndex < trimmed.length) {
+        parts.push(trimmed.slice(lastIndex));
+      }
+      return (
+        <p key={idx} className="text-base text-slate-800">
+          {parts}
+        </p>
+      );
+    }
+    // Línea vacía
+    if (trimmed === "") {
+      return <br key={idx} />;
+    }
+    // Contenido normal
+    return (
+      <p key={idx} className="text-sm text-slate-700 leading-relaxed">
+        {trimmed}
+      </p>
+    );
   });
 
   return (
