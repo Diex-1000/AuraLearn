@@ -1,18 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
-export default function Navbar() {
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
+export default function TestNavbar() {
 
   return (
     <nav className="bg-gray-900 w-full z-50">
@@ -26,16 +17,13 @@ export default function Navbar() {
 
         {/* Menú del centro (visible en escritorio) */}
         <div className="hidden md:flex gap-8 items-center absolute left-1/2 -translate-x-1/2">
-          <NavButton href="/choose" label="Forms" />
-
-          <NavButton href="/perfil" label="Perfil" />
-          
-          {/*<NavButton href="/response" label="Plan de estudio" />*/}
+            <NavButton href="/userselect" label="Dashboard" />
         </div>
 
-        {/* Menu a la derecha */}
+        {/* Idioma (a la derecha) */}
         <div className="hidden md:block">
-          <NavButton href="/home" label="Log out" />
+          <NavButton href="/choose" label="Log in" />
+          {/*<NavButton href="/login" label="Sing up" />*/}
         </div>
 </div>
 

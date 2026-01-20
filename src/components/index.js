@@ -1,6 +1,6 @@
 export { default as Navbar } from './Navbar';
 export { default as Login } from './Login';
-export { default as Forms } from './Forms';
+export { default as Forms } from './forms/Forms';
 export { default as UserData } from './UserData';
 export { default as MainPage } from './MainPage';
 export { default as Features } from './Features';
@@ -9,6 +9,15 @@ export { default as FormHeader } from './FormHeader';
 export { default as LogInNavbar } from './LogInNavbar';
 export { default as SingUp } from './SingUp';
 export { default as ResponseCard } from './ResponseCard';
+export { default as Choose } from './Choose';
+export { default as Scanner } from './Scanner';
+export { default as UserSelection } from './UserSelection';
+export { default as SuperUsuario } from './userTypes/SuperUsuario';
+export { default as Empresa } from './userTypes/Empresa';
+export { default as Gerente } from './userTypes/Gerente';
+export { default as Manager } from './userTypes/Manager';
+export { default as Colaborador } from './userTypes/Colaborador';
+export { default as TestNavbar } from './TestNavbar';
 
 export * from './ui/button';
 export * from './ui/card';

@@ -31,7 +31,7 @@ export default function LogInNavbar() {
 
         {/* Idioma (a la derecha) */}
         <div className="hidden md:block">
-          <NavButton href="/forms" label="Log in" />
+          <NavButton href="/choose" label="Log in" />
           {/*<NavButton href="/login" label="Sing up" />*/}
         </div>
 </div>
